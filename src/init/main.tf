@@ -7,7 +7,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> <terraform aws plugin version eg: 4.0.0>"
+      version = "5.21.0"
     }
   }
 }
@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "terraform_states" {
   bucket_prefix = "terraform-backend-"
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 
   tags = merge(var.tags, {

@@ -7,12 +7,18 @@ variable "aws_region" {
 variable "app_name" {
   type        = string
   description = "App name."
+  default     = "interop-signalhub"
+}
+
+variable "app_version" {
+  type        = string
+  description = "App version (registry image tag)"
 }
 
 variable "environment" {
   type        = string
   default     = "dev"
-  description = "Environment"
+  description = "Environment. Possible values are: Dev, Uat, Prod"
 }
 
 variable "env_short" {
@@ -33,35 +39,17 @@ variable "azs" {
   default     = ["eu-south-1a", "eu-south-1b", "eu-south-1c"]
 }
 
-variable "vpc_private_subnets_cidr" {
-  type        = list(string)
-  description = "Private subnets list of cidr."
-  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-}
-
-variable "vpc_public_subnets_cidr" {
-  type        = list(string)
-  description = "Private subnets list of cidr."
-  default     = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-}
-
-variable "vpc_internal_subnets_cidr" {
-  type        = list(string)
-  description = "Internal subnets list of cidr. Mainly for private endpoints"
-  default     = ["10.0.201.0/24", "10.0.202.0/24", "10.0.203.0/24"]
-}
-
-variable "enable_nat_gateway" {
-  type        = bool
-  description = "Enable/Create nat gateway"
-  default     = false
+variable "cluster_version" {
+  description = "Kubernetes <major>.<minor> version to use for the EKS cluster (i.e.: 1.24)"
+  default     = "1.28"
+  type        = string
 }
 
 ## Public Dns zones
-variable "public_dns_zones" {
-  type        = map(any)
-  description = "Route53 Hosted Zone"
-}
+##  variable "public_dns_zones" {
+##  type        = map(any)
+##  description = "Route53 Hosted Zone"
+##}
 
 variable "dns_record_ttl" {
   type        = number
@@ -74,4 +62,79 @@ variable "tags" {
   default = {
     CreatedBy = "Terraform"
   }
+}
+
+variable "iam_users" {
+  type        = list(string)
+  description = "IAM users"
+}
+
+variable "namespace" {
+  type        = string
+  description = "Namespace for microservices"
+  default = "signalhub"
+}
+
+variable "registry_server" {
+  type = string
+  description = "Registry image server"
+  default = "ghcr.io/pagopa"
+}
+
+variable "registry_username" {
+  type = string
+  description = "Registry image server username"
+}
+
+variable "registry_password" {
+  type = string
+  description = "Registry image server password (or token)"
+}
+
+variable "registry_email" {
+  type = string
+  description = "Registry image server user email"
+}
+
+variable "aurora_rds_cluster_min_capacity" {
+  description = "Aurora serverless cluster min capacity"
+  type        = number
+  default = 2
+}
+
+variable "aurora_rds_cluster_max_capacity" {
+  description = "Aurora serverless cluster max capacity"
+  type        = number
+  default = 4
+}
+
+
+variable "pdnd_api_endpoint" {
+  type = string
+  description = "Endpoint of Interop API"
+}
+
+variable "pdnd_auth_client_id" {
+  type = string
+  description = "Client id of Interop API"
+}
+
+variable "pdnd_auth_token_uri" {
+  type = string
+  description = "Interop Voucher token endpoint"
+}
+
+variable "pdnd_auth_kid" {
+  type = string
+  description = "kid of Interop API"
+}
+
+variable "interop_api_privatekey" {
+  type = string
+  description = "Private key of Interop API Client"
+}
+
+variable "interop_api_publickey" {
+  type = string
+  description = "Public key of Interop API Client"
 }

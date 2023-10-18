@@ -1,0 +1,6 @@
+apiVersion: v2
+name: interop-signalhub-chart
+description: A Helm chart for PagoPA PDND Interop Signalhub
+type: application
+version: 1.0.0
+appVersion: "latest"

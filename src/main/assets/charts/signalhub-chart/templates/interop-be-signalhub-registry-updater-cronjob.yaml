@@ -1,0 +1,62 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: interop-be-signalhub-registry-updater-cronjob
+  labels:
+    helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: interop-be-signalhub-registry-updater-cronjob
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  schedule: {{ .Values.cronjobs.registryUpdaterSchedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: {{ .Values.imagePullSecret }}
+          automountServiceAccountToken: false
+          serviceAccountName: {{ .Values.serviceAccount.name }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+          - name: interop-be-registry-updater-ms
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 12 }}
+            image: "{{ .Values.image.repository }}/interop-be-signalhub-registry-updater:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- with .Values.env }}
+            env:
+              {{- range $key, $val := . }}
+              - name: {{ $key }}
+                value: {{ $val | quote }}
+              {{- end }}
+            {{- end }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+            volumeMounts:
+              - name: interop-api-client-secret
+                mountPath: /certs
+          restartPolicy: OnFailure
+          volumes:
+            - name: interop-api-client-secret
+              secret:
+                secretName: interop-api-client-secret
+                items:
+                  - key: privatekey
+                    path: key.rsa.priv
+                  - key: publickey
+                    path: key.rsa.pub
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: interop-api-client-secret
+data:
+  privatekey: >-
+    {{ .Values.interopApi.privateKey | b64enc }}
+  publickey: >-
+    {{ .Values.interopApi.publicKey | b64enc }}

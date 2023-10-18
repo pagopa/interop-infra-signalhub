@@ -13,6 +13,7 @@ variable "environment" {
 variable "github_repository" {
   type        = string
   description = "This github repository"
+  default = "ABCD"
 }
 
 
