@@ -72,89 +72,89 @@ variable "iam_users" {
 variable "namespace" {
   type        = string
   description = "Namespace for microservices"
-  default = "signalhub"
+  default     = "signalhub"
 }
 
 variable "registry_server" {
-  type = string
+  type        = string
   description = "Registry image server"
-  default = "ghcr.io/pagopa"
+  default     = "ghcr.io/pagopa"
 }
 
 variable "registry_username" {
-  type = string
+  type        = string
   description = "Registry image server username"
 }
 
 variable "registry_password" {
-  type = string
+  type        = string
   description = "Registry image server password (or token)"
 }
 
 variable "registry_email" {
-  type = string
+  type        = string
   description = "Registry image server user email"
 }
 
 variable "aurora_rds_cluster_min_capacity" {
   description = "Aurora serverless cluster min capacity"
   type        = number
-  default = 2
+  default     = 2
 }
 
 variable "aurora_rds_cluster_max_capacity" {
   description = "Aurora serverless cluster max capacity"
   type        = number
-  default = 4
+  default     = 4
 }
 
 
 variable "pdnd_api_endpoint" {
-  type = string
+  type        = string
   description = "Endpoint of Interop API"
 }
 
 variable "pdnd_auth_client_id" {
-  type = string
+  type        = string
   description = "Client id of Interop API"
 }
 
 variable "pdnd_auth_token_uri" {
-  type = string
+  type        = string
   description = "Interop Voucher token endpoint"
 }
 
 variable "pdnd_auth_kid" {
-  type = string
+  type        = string
   description = "kid of Interop API"
 }
 
 variable "interop_api_privatekey" {
-  type = string
+  type        = string
   description = "Private key of Interop API Client"
 }
 
 variable "interop_api_publickey" {
-  type = string
+  type        = string
   description = "Public key of Interop API Client"
 }
 
 variable "helm_aws_load_balancer_version" {
-  type = string
+  type        = string
   description = "Helm Chart AWS Load balancer controller version"
 }
 
 variable "helm_metrics_server_version" {
-  type = string
+  type        = string
   description = "Helm Chart Metrics Server version"
 }
 
 variable "helm_prometheus_version" {
-  type = string
+  type        = string
   description = "Helm Chart Metric Server version"
 }
 
 variable "helm_reloader_version" {
-  type = string
+  type        = string
   description = "Helm Chart Reloader version"
 }

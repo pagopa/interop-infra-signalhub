@@ -8,19 +8,19 @@ module "aurora_postgresql_v2" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "8.5.0"
 
-  name              = "${local.project}-postgresql"
-  database_name     = regex("[[:alnum:]]+", var.app_name)
-  engine            = data.aws_rds_engine_version.postgresql.engine
-  engine_version    = data.aws_rds_engine_version.postgresql.version
-  engine_mode       = "provisioned"
-  storage_encrypted = true
-  master_username = "root"
+  name                        = "${local.project}-postgresql"
+  database_name               = regex("[[:alnum:]]+", var.app_name)
+  engine                      = data.aws_rds_engine_version.postgresql.engine
+  engine_version              = data.aws_rds_engine_version.postgresql.version
+  engine_mode                 = "provisioned"
+  storage_encrypted           = true
+  master_username             = "root"
   manage_master_user_password = false
   master_password             = random_password.master.result
 
-  vpc_id               = module.vpc.vpc_id
+  vpc_id                 = module.vpc.vpc_id
   create_db_subnet_group = true
-  subnets              = module.vpc.private_subnets
+  subnets                = module.vpc.private_subnets
 
   security_group_rules = {
     vpc_ingress = {
@@ -87,12 +87,12 @@ resource "aws_security_group" "redis" {
 #}
 
 module "redis" {
-  source = "umotif-public/elasticache-redis/aws"
+  source  = "umotif-public/elasticache-redis/aws"
   version = "~> 3.5.0"
 
-  name_prefix           = "${local.project}-redis"
-  num_cache_clusters    = 2
-  node_type             = "cache.t4g.small"
+  name_prefix        = "${local.project}-redis"
+  num_cache_clusters = 2
+  node_type          = "cache.t4g.small"
 
   engine_version           = "7.0"
   port                     = 6379
@@ -131,7 +131,7 @@ module "redis" {
     }
   ]
 
-#  allowed_security_groups = [aws_security_group.redis.id]
+  #  allowed_security_groups = [aws_security_group.redis.id]
 
   tags = merge(var.tags, {
     name = "ElastiCache Redis cluster"

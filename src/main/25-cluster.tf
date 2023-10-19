@@ -2,9 +2,9 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.17.2"
 
-  cluster_name                   = "${local.project}-cluster"
-  cluster_version                = var.cluster_version
-  cluster_endpoint_public_access = true
+  cluster_name                    = "${local.project}-cluster"
+  cluster_version                 = var.cluster_version
+  cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
   cluster_enabled_log_types = ["api", "authenticator", "audit", "scheduler", "controllerManager"]
@@ -27,7 +27,7 @@ module "eks" {
       })
     }
     coredns = {
-      most_recent                 = true
+      most_recent = true
       configuration_values = jsonencode({
         computeType = "Fargate"
       })
@@ -42,23 +42,23 @@ module "eks" {
 
   fargate_profiles = merge(
     { for i in range(3) :
-        "${local.project}-${element(split("-", var.azs[i]), 2)}" => {
-          selectors  = [{ namespace = "*" }]
-          subnet_ids = [element(module.vpc.private_subnets, i)]
-        }
+      "${local.project}-${element(split("-", var.azs[i]), 2)}" => {
+        selectors  = [{ namespace = "*" }]
+        subnet_ids = [element(module.vpc.private_subnets, i)]
+      }
     },
     { for i in range(3) :
-        "kube-system-${element(split("-", var.azs[i]), 2)}" => {
-          selectors  = [{ namespace = "kube-system" }]
-          subnet_ids = [element(module.vpc.private_subnets, i)]
-        }
+      "kube-system-${element(split("-", var.azs[i]), 2)}" => {
+        selectors  = [{ namespace = "kube-system" }]
+        subnet_ids = [element(module.vpc.private_subnets, i)]
+      }
     }
   )
 
-#  kms_key_administrators = var.kms_auth.admins
-#  kms_key_service_users  = var.kms_auth.services
-#  kms_key_users          = var.kms_auth.users
-#
+  #  kms_key_administrators = var.kms_auth.admins
+  #  kms_key_service_users  = var.kms_auth.services
+  #  kms_key_users          = var.kms_auth.users
+  #
   manage_aws_auth_configmap = true
   aws_auth_roles = [
     {

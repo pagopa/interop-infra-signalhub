@@ -84,24 +84,24 @@ resource "helm_release" "prometheus" {
     value = false
   }
 
-#  set {
-#    name  = "server.resources.limits.memory"
-#    value = "3000Mi"
-#  }
-#
-#  set {
-#    name  = "server.resources.limits.cpu"
-#    value = "1500m"
-#  }
-#
-#  set {
-#    name  = "server.resources.requests.memory"
-#    value = "2000Mi"
-#  }
-#
-#  set {
-#    name  = "server.resources.requests.cpu"
-#    value = "250m"
-#  }
+  #  set {
+  #    name  = "server.resources.limits.memory"
+  #    value = "3000Mi"
+  #  }
+  #
+  #  set {
+  #    name  = "server.resources.limits.cpu"
+  #    value = "1500m"
+  #  }
+  #
+  #  set {
+  #    name  = "server.resources.requests.memory"
+  #    value = "2000Mi"
+  #  }
+  #
+  #  set {
+  #    name  = "server.resources.requests.cpu"
+  #    value = "250m"
+  #  }
 }
 

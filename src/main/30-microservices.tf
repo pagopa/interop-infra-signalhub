@@ -6,7 +6,7 @@ resource "kubernetes_namespace" "namespace" {
 
 resource "kubernetes_secret" "image_pull_secret" {
   metadata {
-    name = "image-pull-secret"
+    name      = "image-pull-secret"
     namespace = var.namespace
   }
 
@@ -37,7 +37,7 @@ module "sqs_access" {
 
   oidc_providers = {
     main = {
-      provider_arn               =  module.eks.oidc_provider_arn
+      provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["${var.namespace}:${var.app_name}"]
     }
   }
@@ -55,16 +55,16 @@ resource "kubernetes_service_account" "sqs_access" {
 
 
 resource "helm_release" "signalhub" {
-  name      = var.app_name
-  namespace = kubernetes_namespace.namespace.id
+  name       = var.app_name
+  namespace  = kubernetes_namespace.namespace.id
   repository = "${path.module}/assets/charts"
-  chart = "signalhub-chart"
+  chart      = "signalhub-chart"
   version    = "1.0.0"
 
   values = ["${file("assets/charts/signalhub-chart/configuration.yaml")}"]
 
   set {
-    name = "serviceAccount.name"
+    name  = "serviceAccount.name"
     value = kubernetes_service_account.sqs_access.metadata.0.name
   }
 
@@ -79,77 +79,77 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name = "image.repository"
+    name  = "image.repository"
     value = var.registry_server
   }
 
   set {
-    name = "image.tag"
+    name  = "image.tag"
     value = var.app_version
   }
 
   set {
-    name = "env.AWS_SQS_ENDPOINT"
-    value = replace( module.sqs.queue_url, "${local.project}-internal-queue", "")
+    name  = "env.AWS_SQS_ENDPOINT"
+    value = replace(module.sqs.queue_url, "${local.project}-internal-queue", "")
   }
 
   set {
-    name = "env.AWS_INTERNALQUEUENAME"
+    name  = "env.AWS_INTERNALQUEUENAME"
     value = "${local.project}-internal-queue"
   }
 
   set {
-    name = "env.MANAGEMENT_ENDPOINTHEALTH_PROBES_ENABLED"
+    name  = "env.MANAGEMENT_ENDPOINTHEALTH_PROBES_ENABLED"
     value = "true"
   }
 
   set {
-    name = "env.MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS"
+    name  = "env.MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS"
     value = "always"
   }
 
   set {
-    name = "pushServiceFqdn"
+    name  = "pushServiceFqdn"
     value = "push.${var.environment}.signalhub.interop.pagopa.it"
   }
 
   set {
-    name = "pullServiceFqdn"
+    name  = "pullServiceFqdn"
     value = "pull.${var.environment}.signalhub.interop.pagopa.it"
   }
 
   set {
-    name = "env.SPRING_REDIS_HOST"
+    name  = "env.SPRING_REDIS_HOST"
     value = module.redis.elasticache_replication_group_primary_endpoint_address
   }
 
   set {
-    name = "env.SPRING_REDIS_PORT"
+    name  = "env.SPRING_REDIS_PORT"
     value = module.redis.elasticache_port
   }
 
   set {
-    name = "env.DATABASE_NAME"
+    name  = "env.DATABASE_NAME"
     value = module.aurora_postgresql_v2.cluster_database_name
   }
 
   set {
-    name = "env.DATABASE_READER_HOST"
+    name  = "env.DATABASE_READER_HOST"
     value = module.aurora_postgresql_v2.cluster_reader_endpoint
   }
 
   set {
-    name = "env.DATABASE_WRITER_HOST"
+    name  = "env.DATABASE_WRITER_HOST"
     value = module.aurora_postgresql_v2.cluster_endpoint
   }
 
   set {
-    name = "env.DATABASE_PORT"
+    name  = "env.DATABASE_PORT"
     value = module.aurora_postgresql_v2.cluster_port
   }
 
   set {
-    name = "env.DATABASE_USERNAME"
+    name  = "env.DATABASE_USERNAME"
     value = module.aurora_postgresql_v2.cluster_master_username
   }
 
@@ -159,42 +159,42 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name = "env.PDND_CLIENT_ENDPOINT-URL"
+    name  = "env.PDND_CLIENT_ENDPOINT-URL"
     value = var.pdnd_api_endpoint
   }
 
   set {
-    name = "env.SECURITY_PAGOPAPROVIDER_CLIENTID"
+    name  = "env.SECURITY_PAGOPAPROVIDER_CLIENTID"
     value = var.pdnd_auth_client_id
   }
 
   set {
-    name = "env.SECURITY_PAGOPAPROVIDER_TOKENURI"
+    name  = "env.SECURITY_PAGOPAPROVIDER_TOKENURI"
     value = var.pdnd_auth_token_uri
   }
 
   set {
-    name = "env.SECURITY_PAGOPAPROVIDER_PATHPRIVATEKEY"
+    name  = "env.SECURITY_PAGOPAPROVIDER_PATHPRIVATEKEY"
     value = "/certs/key.rsa.priv"
   }
 
   set {
-    name = "env.SECURITY_PAGOPAPROVIDER_PATHPUBLICKEY"
+    name  = "env.SECURITY_PAGOPAPROVIDER_PATHPUBLICKEY"
     value = "/certs/key.rsa.pub"
   }
 
   set {
-    name = "env.SECURITY_PAGOPAPROVIDER_KID"
+    name  = "env.SECURITY_PAGOPAPROVIDER_KID"
     value = var.pdnd_auth_kid
   }
 
   set {
-    name = "interopApi.privateKey"
+    name  = "interopApi.privateKey"
     value = var.interop_api_privatekey
   }
 
   set {
-    name = "interopApi.publicKey"
+    name  = "interopApi.publicKey"
     value = var.interop_api_publickey
   }
 
@@ -206,13 +206,13 @@ resource "helm_release" "signalhub" {
 
   // TODO da rimuovere
   set {
-    name = "env.DATABASE_HOST"
+    name  = "env.DATABASE_HOST"
     value = module.aurora_postgresql_v2.cluster_endpoint
   }
 
   // TODO da rimuovere
   set {
-    name = "env.dummy"
+    name  = "env.dummy"
     value = "dummy6"
   }
 }
@@ -220,7 +220,7 @@ resource "helm_release" "signalhub" {
 
 resource "kubernetes_job" "demo" {
   metadata {
-    name = "demo"
+    name      = "demo"
     namespace = var.namespace
   }
   spec {

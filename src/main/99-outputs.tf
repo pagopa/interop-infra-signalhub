@@ -12,7 +12,7 @@ output "ns_env_signalhub_interop_pagopa_it" {
 
 output "signalhub_cluster_name" {
   description = "Cluster name"
-  value = module.eks.cluster_name
+  value       = module.eks.cluster_name
 }
 
 output "sqs" {
