@@ -51,7 +51,6 @@ resource "kubectl_manifest" "metrics_server_sg" {
   })
 }
 
-# TODO rimosso temporaneamente - problema node-exporter pods pending
 resource "helm_release" "prometheus" {
   name       = "prometheus"
   repository = "https://prometheus-community.github.io/helm-charts"
@@ -103,5 +102,7 @@ resource "helm_release" "prometheus" {
   #    name  = "server.resources.requests.cpu"
   #    value = "250m"
   #  }
+
+  depends_on = [helm_release.metrics_server]
 }
 

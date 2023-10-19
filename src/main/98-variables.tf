@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "app_name" {
   type        = string
   description = "App name."
-  default     = "interop-signalhub"
+  default     = "interop-be-signalhub"
 }
 
 variable "app_version" {
@@ -64,10 +64,10 @@ variable "tags" {
   }
 }
 
-variable "iam_users" {
-  type        = list(string)
-  description = "IAM users"
-}
+#variable "iam_users" {
+#  type        = list(string)
+#  description = "IAM users"
+#}
 
 variable "namespace" {
   type        = string
@@ -81,20 +81,20 @@ variable "registry_server" {
   default     = "ghcr.io/pagopa"
 }
 
-variable "registry_username" {
-  type        = string
-  description = "Registry image server username"
-}
-
-variable "registry_password" {
-  type        = string
-  description = "Registry image server password (or token)"
-}
-
-variable "registry_email" {
-  type        = string
-  description = "Registry image server user email"
-}
+#variable "registry_username" {
+#  type        = string
+#  description = "Registry image server username"
+#}
+#
+#variable "registry_password" {
+#  type        = string
+#  description = "Registry image server password (or token)"
+#}
+#
+#variable "registry_email" {
+#  type        = string
+#  description = "Registry image server user email"
+#}
 
 variable "aurora_rds_cluster_min_capacity" {
   description = "Aurora serverless cluster min capacity"

@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: interop-be-signalhub-pull-service-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - host: {{ .Values.apiServiceFqdn }}
+      http:
+        paths:
+          - path: /pull
+            pathType: Prefix
+            backend:
+              service:
+                name: interop-be-signalhub-pull-service-service
+                port:
+                  number: {{ .Values.image.port }}
+          - path: /push
+            pathType: Prefix
+            backend:
+              service:
+                name: interop-be-signalhub-push-service-service
+                port:
+                  number: {{ .Values.image.port }}

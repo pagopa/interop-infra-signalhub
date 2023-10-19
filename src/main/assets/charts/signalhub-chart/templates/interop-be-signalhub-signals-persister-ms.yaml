@@ -27,8 +27,10 @@ spec:
       labels:
         app.kubernetes.io/name: interop-be-signalhub-signals-persister-ms
     spec:
+      {{- if .Values.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret }}
+      {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ .Values.serviceAccount.name }}
       securityContext:

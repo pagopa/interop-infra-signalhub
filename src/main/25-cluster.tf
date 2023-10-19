@@ -2,7 +2,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.17.2"
 
-  cluster_name                    = "${local.project}-cluster"
+  cluster_name                    = "${local.project}-eks"
   cluster_version                 = var.cluster_version
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
@@ -137,16 +137,16 @@ module "allow_assume_eks_admins_iam_policy" {
   })
 }
 
-module "eks_admins_iam_group" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-  version = "5.30.0"
-
-  name                              = "eks-admin"
-  attach_iam_self_management_policy = false
-  create_group                      = true
-  group_users                       = var.iam_users
-  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
-}
+#module "eks_admins_iam_group" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
+#  version = "5.30.0"
+#
+#  name                              = "eks-admin"
+#  attach_iam_self_management_policy = false
+#  create_group                      = true
+#  group_users                       = var.iam_users
+#  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
+#}
 
 #module "eks_admins_iam_group_signal_hub_developers"  {
 #  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"

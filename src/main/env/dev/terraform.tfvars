@@ -20,4 +20,7 @@ helm_metrics_server_version = "3.11.0"
 helm_prometheus_version = "25.1.0"
 helm_reloader_version = "1.0.44"
 
-
+// TODO rimuovere dopo integrazione con KMS
+pdnd_auth_kid = "DUMMY"
+interop_api_publickey = "DUMMY"
+interop_api_privatekey = "DUMMY"

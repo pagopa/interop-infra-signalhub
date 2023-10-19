@@ -4,27 +4,27 @@ resource "kubernetes_namespace" "namespace" {
   }
 }
 
-resource "kubernetes_secret" "image_pull_secret" {
-  metadata {
-    name      = "image-pull-secret"
-    namespace = var.namespace
-  }
-
-  type = "kubernetes.io/dockerconfigjson"
-
-  data = {
-    ".dockerconfigjson" = jsonencode({
-      auths = {
-        "https://${var.registry_server}" = {
-          "username" = var.registry_username
-          "password" = var.registry_password
-          "email"    = var.registry_email
-          "auth"     = base64encode("${var.registry_username}:${var.registry_password}")
-        }
-      }
-    })
-  }
-}
+#resource "kubernetes_secret" "image_pull_secret" {
+#  metadata {
+#    name      = "image-pull-secret"
+#    namespace = var.namespace
+#  }
+#
+#  type = "kubernetes.io/dockerconfigjson"
+#
+#  data = {
+#    ".dockerconfigjson" = jsonencode({
+#      auths = {
+#        "https://${var.registry_server}" = {
+#          "username" = var.registry_username
+#          "password" = var.registry_password
+#          "email"    = var.registry_email
+#          "auth"     = base64encode("${var.registry_username}:${var.registry_password}")
+#        }
+#      }
+#    })
+#  }
+#}
 
 module "sqs_access" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -73,10 +73,10 @@ resource "helm_release" "signalhub" {
     value = module.vpc.default_security_group_id
   }
 
-  set {
-    name  = "imagePullSecret"
-    value = kubernetes_secret.image_pull_secret.metadata.0.name
-  }
+#  set {
+#    name  = "imagePullSecret"
+#    value = kubernetes_secret.image_pull_secret.metadata.0.name
+#  }
 
   set {
     name  = "image.repository"
@@ -109,13 +109,8 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name  = "pushServiceFqdn"
-    value = "push.${var.environment}.signalhub.interop.pagopa.it"
-  }
-
-  set {
-    name  = "pullServiceFqdn"
-    value = "pull.${var.environment}.signalhub.interop.pagopa.it"
+    name  = "apiServiceFqdn"
+    value = "api.${var.environment}.signalhub.interop.pagopa.it"
   }
 
   set {

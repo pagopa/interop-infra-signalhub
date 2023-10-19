@@ -18,8 +18,10 @@ spec:
     spec:
       template:
         spec:
+          {{- if .Values.imagePullSecret }}
           imagePullSecrets:
-          - name: {{ .Values.imagePullSecret }}
+            - name: {{ .Values.imagePullSecret }}
+          {{- end }}
           automountServiceAccountToken: false
           serviceAccountName: {{ .Values.serviceAccount.name }}
           securityContext:

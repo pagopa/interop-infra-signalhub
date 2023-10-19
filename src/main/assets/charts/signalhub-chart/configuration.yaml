@@ -75,8 +75,7 @@ autoscaling:
   cooldownPeriod: 300 # seconds
   triggers: []
 
-pushServiceFqdn: ""
-pullServiceFqdn: ""
+apiServiceFqdn: ""
 
 cronjobs:
   registryUpdaterSchedule: "0 */1 * * *"

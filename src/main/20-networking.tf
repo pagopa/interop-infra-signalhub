@@ -63,7 +63,7 @@ resource "aws_security_group" "vpc_endpoints_private_sg" {
 
 module "vpc_endpoints" {
   source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "~> v4.0.1"
+  version = "~> v5.1.2"
 
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [aws_security_group.vpc_endpoints_private_sg.id]

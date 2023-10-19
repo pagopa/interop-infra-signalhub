@@ -27,8 +27,10 @@ spec:
       labels:
         app.kubernetes.io/name: interop-be-signalhub-push-service-ms
     spec:
+      {{- if .Values.imagePullSecret }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecret }}
+      {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ .Values.serviceAccount.name }}
       securityContext:
@@ -80,24 +82,3 @@ spec:
   type: ClusterIP
   selector:
     app.kubernetes.io/name: interop-be-signalhub-push-service-ms
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: interop-be-signalhub-push-service-ingress
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-spec:
-  ingressClassName: alb
-  rules:
-    - host: {{ .Values.pushServiceFqdn }}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: interop-be-signalhub-push-service-service
-                port:
-                  number: {{ .Values.image.port }}
