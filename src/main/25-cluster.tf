@@ -105,7 +105,7 @@ module "eks_admins_iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.30.0"
 
-  role_name         = "eks-admin"
+  role_name         = "eks-admin-role"
   create_role       = true
   role_requires_mfa = false
 
@@ -147,6 +147,15 @@ module "eks_admins_iam_group" {
   group_users                       = var.iam_users
   custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
 }
+
+#module "eks_admins_iam_group_signal_hub_developers"  {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
+#  version = "5.30.0"
+#
+#  name                              = "SignalHubDevelopers"
+#  attach_iam_self_management_policy = false
+#  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
+#}
 
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
@@ -195,7 +204,7 @@ resource "helm_release" "aws_load_balancer_controller" {
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   namespace  = "kube-system"
-  version    = "1.6.1"
+  version    = var.helm_aws_load_balancer_version
 
   set {
     name  = "replicaCount"
@@ -230,5 +239,24 @@ resource "helm_release" "aws_load_balancer_controller" {
   set {
     name  = "vpcId"
     value = module.vpc.vpc_id
+  }
+}
+
+resource "helm_release" "reloader" {
+  name       = "reloader"
+  repository = "https://stakater.github.io/stakater-charts"
+  chart      = "reloader"
+  version    = var.helm_reloader_version
+  namespace  = kubernetes_namespace.monitoring.id
+
+
+  set {
+    name  = "reloader.watchGlobally"
+    value = "false"
+  }
+
+  set {
+    name  = "namespace"
+    value = var.namespace
   }
 }

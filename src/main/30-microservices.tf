@@ -216,3 +216,27 @@ resource "helm_release" "signalhub" {
     value = "dummy6"
   }
 }
+
+
+resource "kubernetes_job" "demo" {
+  metadata {
+    name = "demo"
+    namespace = var.namespace
+  }
+  spec {
+    template {
+      metadata {}
+      spec {
+        container {
+          name    = "pi"
+          image   = "alpine"
+          command = ["sh", "-c", "sleep 10"]
+        }
+        restart_policy = "Never"
+      }
+    }
+    backoff_limit = 4
+  }
+
+  depends_on = [helm_release.signalhub]
+}

@@ -138,3 +138,23 @@ variable "interop_api_publickey" {
   type = string
   description = "Public key of Interop API Client"
 }
+
+variable "helm_aws_load_balancer_version" {
+  type = string
+  description = "Helm Chart AWS Load balancer controller version"
+}
+
+variable "helm_metrics_server_version" {
+  type = string
+  description = "Helm Chart Metrics Server version"
+}
+
+variable "helm_prometheus_version" {
+  type = string
+  description = "Helm Chart Metric Server version"
+}
+
+variable "helm_reloader_version" {
+  type = string
+  description = "Helm Chart Reloader version"
+}
