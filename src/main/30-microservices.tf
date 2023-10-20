@@ -26,6 +26,7 @@ resource "kubernetes_namespace" "namespace" {
 #  }
 #}
 
+
 module "sqs_access" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 

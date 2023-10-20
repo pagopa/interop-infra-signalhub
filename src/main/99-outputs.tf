@@ -31,3 +31,7 @@ output "cluster_iam_role_name" {
 output "aws_caller_identity_current_arn" {
   value = data.aws_caller_identity.current.arn
 }
+
+output "aws_caller_identity_current_id" {
+  value = data.aws_caller_identity.current.id
+}

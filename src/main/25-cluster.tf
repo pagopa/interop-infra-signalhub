@@ -55,7 +55,7 @@ module "eks" {
     }
   )
 
-  kms_key_administrators = [data.aws_caller_identity.current.arn]
+  kms_key_administrators = [data.aws_caller_identity.current.arn, data.aws_iam_role.github_action.arn]
   #  kms_key_service_users  = var.kms_auth.services
   #  kms_key_users          = var.kms_auth.users
   #
@@ -78,6 +78,10 @@ module "eks" {
       description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
     }
   }
+}
+
+data "aws_iam_role" "github_action" {
+  name = "GitHubActionIACRole"
 }
 
 module "allow_eks_access_iam_policy" {
