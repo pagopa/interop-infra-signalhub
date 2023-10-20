@@ -73,10 +73,10 @@ resource "helm_release" "signalhub" {
     value = module.vpc.default_security_group_id
   }
 
-#  set {
-#    name  = "imagePullSecret"
-#    value = kubernetes_secret.image_pull_secret.metadata.0.name
-#  }
+  #  set {
+  #    name  = "imagePullSecret"
+  #    value = kubernetes_secret.image_pull_secret.metadata.0.name
+  #  }
 
   set {
     name  = "image.repository"
