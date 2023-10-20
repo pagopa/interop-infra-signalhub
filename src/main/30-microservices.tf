@@ -61,7 +61,7 @@ resource "helm_release" "signalhub" {
   chart      = "signalhub-chart"
   version    = "1.0.0"
 
-  values = ["${file("assets/charts/signalhub-chart/configuration.yaml")}"]
+  values = ["${file("assets/charts/signalhub-chart/configuration_values.yaml")}"]
 
   set {
     name  = "serviceAccount.name"

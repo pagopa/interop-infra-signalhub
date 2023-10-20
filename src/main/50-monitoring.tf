@@ -57,51 +57,7 @@ resource "helm_release" "prometheus" {
   chart      = "prometheus"
   version    = var.helm_prometheus_version
   namespace  = kubernetes_namespace.monitoring.id
-
-  set {
-    name  = "server.global.scrape_interval"
-    value = "5s"
-  }
-
-  set {
-    name  = "server.global.evaluation_interval"
-    value = "5s"
-  }
-
-  set {
-    name  = "server.global.scrape_timeout"
-    value = "4s"
-  }
-
-  set {
-    name  = "server.persistentVolume.enabled"
-    value = false
-  }
-
-  set {
-    name  = "alertmanager.enabled"
-    value = false
-  }
-
-  #  set {
-  #    name  = "server.resources.limits.memory"
-  #    value = "3000Mi"
-  #  }
-  #
-  #  set {
-  #    name  = "server.resources.limits.cpu"
-  #    value = "1500m"
-  #  }
-  #
-  #  set {
-  #    name  = "server.resources.requests.memory"
-  #    value = "2000Mi"
-  #  }
-  #
-  #  set {
-  #    name  = "server.resources.requests.cpu"
-  #    value = "250m"
-  #  }
+  values = ["${file("assets/prometheus_values.yaml")}"]
 
   depends_on = [helm_release.metrics_server]
 }
