@@ -11,7 +11,7 @@ tags = {
   CostCenter  = "TS310 - PAGAMENTI e SERVIZI"
 }
 
-app_version = "v0.0.1-SNAPSHOT"
+app_version = "feature-poc"
 pdnd_api_endpoint = "https://api.uat.interop.pagopa.it/1.0"
 pdnd_auth_client_id = "11368527-494b-4244-9706-b782b5443831"
 pdnd_auth_token_uri = "https://auth.uat.interop.pagopa.it/token.oauth2"

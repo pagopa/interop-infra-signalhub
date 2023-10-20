@@ -55,7 +55,7 @@ module "eks" {
     }
   )
 
-  #  kms_key_administrators = var.kms_auth.admins
+  kms_key_administrators = [data.aws_caller_identity.current.arn]
   #  kms_key_service_users  = var.kms_auth.services
   #  kms_key_users          = var.kms_auth.users
   #

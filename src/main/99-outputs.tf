@@ -26,3 +26,8 @@ output "redis" {
 output "cluster_iam_role_name" {
   value = module.eks.cluster_iam_role_name
 }
+
+
+output "aws_caller_identity_current_arn" {
+  value = data.aws_caller_identity.current.arn
+}

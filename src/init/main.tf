@@ -131,27 +131,27 @@ resource "aws_iam_role_policy_attachment" "githubiac" {
 }
 
 
-resource "aws_iam_policy" "policy_kms" {
-  name        = "GitHubActionKMSAccessPolicy"
-  description = "Policy to read kms keys"
-
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "kms:Describe*",
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "githubiac_kms" {
-  role       = aws_iam_role.githubiac.name
-  policy_arn = aws_iam_policy.policy_kms.arn
-}
+#resource "aws_iam_policy" "policy_kms" {
+#  name        = "GitHubActionKMSAccessPolicy"
+#  description = "Policy to read kms keys"
+#
+#  # Terraform's "jsonencode" function converts a
+#  # Terraform expression result to valid JSON syntax.
+#  policy = jsonencode({
+#    Version = "2012-10-17"
+#    Statement = [
+#      {
+#        Action = [
+#          "kms:Describe*",
+#        ]
+#        Effect   = "Allow"
+#        Resource = "*"
+#      },
+#    ]
+#  })
+#}
+#
+#resource "aws_iam_role_policy_attachment" "githubiac_kms" {
+#  role       = aws_iam_role.githubiac.name
+#  policy_arn = aws_iam_policy.policy_kms.arn
+#}
