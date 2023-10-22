@@ -27,10 +27,10 @@ resource "kubernetes_namespace" "namespace" {
 #}
 
 resource "aws_kms_key" "interop_client_key" {
-  description             = "KMS key for Interop API"
-  deletion_window_in_days = 30
+  description              = "KMS key for Interop API"
+  deletion_window_in_days  = 30
   customer_master_key_spec = "RSA_2048"
-  key_usage = "ENCRYPT_DECRYPT"
+  key_usage                = "ENCRYPT_DECRYPT"
 }
 
 resource "aws_kms_key_policy" "example" {
@@ -56,7 +56,7 @@ resource "aws_kms_key_policy" "example" {
 data "aws_iam_policy_document" "kms_sqs_access" {
 
   statement {
-    sid = "AllowSQSUse"
+    sid    = "AllowSQSUse"
     effect = "Allow"
     actions = [
       "sqs:*"
@@ -67,7 +67,7 @@ data "aws_iam_policy_document" "kms_sqs_access" {
   }
 
   statement {
-    sid = "AllowKMSUse"
+    sid    = "AllowKMSUse"
     effect = "Allow"
     actions = [
       "kms:Encrypt",
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "kms_sqs_access" {
 resource "aws_iam_policy" "kms_sqs_access" {
   name        = "kmsuse"
   description = "Policy to allow use of KMS Key"
-  policy      = "${data.aws_iam_policy_document.kms_sqs_access.json}"
+  policy      = data.aws_iam_policy_document.kms_sqs_access.json
 }
 
 
