@@ -35,3 +35,11 @@ output "aws_caller_identity_current_arn" {
 output "aws_caller_identity_current_id" {
   value = data.aws_caller_identity.current.id
 }
+
+output "interop_client_key_arn" {
+  value = aws_kms_key.interop_client_key.arn
+}
+
+output "interop_client_key_id" {
+  value = aws_kms_key.interop_client_key.key_id
+}

@@ -26,6 +26,68 @@ resource "kubernetes_namespace" "namespace" {
 #  }
 #}
 
+resource "aws_kms_key" "interop_client_key" {
+  description             = "KMS key for Interop API"
+  deletion_window_in_days = 30
+  customer_master_key_spec = "RSA_2048"
+  key_usage = "ENCRYPT_DECRYPT"
+}
+
+resource "aws_kms_key_policy" "example" {
+  key_id = aws_kms_key.interop_client_key.id
+  policy = jsonencode({
+    Id = "example"
+    Statement = [
+      {
+        Action = "kms:*"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+
+        Resource = "*"
+        Sid      = "Enable IAM User Permissions"
+      },
+    ]
+    Version = "2012-10-17"
+  })
+}
+
+data "aws_iam_policy_document" "kms_sqs_access" {
+
+  statement {
+    sid = "AllowSQSUse"
+    effect = "Allow"
+    actions = [
+      "sqs:*"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid = "AllowKMSUse"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey",
+    ]
+    resources = [
+      aws_kms_key.interop_client_key.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "kms_sqs_access" {
+  name        = "kmsuse"
+  description = "Policy to allow use of KMS Key"
+  policy      = "${data.aws_iam_policy_document.kms_sqs_access.json}"
+}
+
 
 module "sqs_access" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -33,7 +95,7 @@ module "sqs_access" {
   role_name = "${local.project}-serviceaccount-role"
 
   role_policy_arns = {
-    policy = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+    policy = aws_iam_policy.kms_sqs_access.arn
   }
 
   oidc_providers = {
@@ -177,6 +239,11 @@ resource "helm_release" "signalhub" {
   set {
     name  = "env.SECURITY_PAGOPAPROVIDER_PATHPUBLICKEY"
     value = "/certs/key.rsa.pub"
+  }
+
+  set {
+    name  = "env.SECURITY_PAGOPAPROVIDER_KMSKEYARN"
+    value = aws_kms_key.interop_client_key.arn
   }
 
   set {
