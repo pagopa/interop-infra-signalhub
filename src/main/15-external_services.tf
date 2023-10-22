@@ -25,6 +25,9 @@ module "aurora_postgresql_v2" {
   security_group_rules = {
     vpc_ingress = {
       cidr_blocks = module.vpc.private_subnets_cidr_blocks
+    },
+    bastion_ingress = {
+      cidr_blocks = module.vpc.public_subnets_cidr_blocks
     }
   }
 
