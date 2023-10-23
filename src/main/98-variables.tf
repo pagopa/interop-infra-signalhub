@@ -158,3 +158,8 @@ variable "helm_reloader_version" {
   type        = string
   description = "Helm Chart Reloader version"
 }
+
+variable "initial_load_s3_bucket" {
+  type        = string
+  description = "Bucket for initial eservices and agreements loading"
+}

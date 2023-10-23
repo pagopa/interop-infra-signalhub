@@ -30,13 +30,13 @@ resource "aws_kms_key" "interop_client_key" {
   description              = "KMS key for Interop API"
   deletion_window_in_days  = 30
   customer_master_key_spec = "RSA_2048"
-  key_usage                = "ENCRYPT_DECRYPT"
+  key_usage                = "SIGN_VERIFY"
 }
 
-resource "aws_kms_key_policy" "example" {
+resource "aws_kms_key_policy" "key_policy" {
   key_id = aws_kms_key.interop_client_key.id
   policy = jsonencode({
-    Id = "example"
+    Id = "Policy for interop key"
     Statement = [
       {
         Action = "kms:*"
@@ -70,11 +70,14 @@ data "aws_iam_policy_document" "kms_sqs_access" {
     sid    = "AllowKMSUse"
     effect = "Allow"
     actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:ReEncrypt*",
       "kms:GenerateDataKey*",
       "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign",
+      "kms:GenerateMac",
+      "kms:GenerateRandom",
+      "kms:Verify",
+      "kms:VerifyMac"
     ]
     resources = [
       aws_kms_key.interop_client_key.arn
