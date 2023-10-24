@@ -37,17 +37,33 @@ service:
   type: ClusterIP
   port: 80
 
-livenessProbe:
+pushLivenessProbe:
   httpGet:
-    path: /actuator/health/liveness
+    path: /push/actuator/health/liveness
     port: 8080
   initialDelaySeconds: 120
   failureThreshold: 12
   periodSeconds: 15
 
-readinessProbe:
+pushReadinessProbe:
   httpGet:
-    path: /actuator/health/readiness
+    path: /push/actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+pullLivenessProbe:
+  httpGet:
+    path: /pull/actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+pullReadinessProbe:
+  httpGet:
+    path: /pull/actuator/health/readiness
     port: 8080
   initialDelaySeconds: 120
   failureThreshold: 12
@@ -83,3 +99,5 @@ cronjobs:
 interopApi:
   privateKey: ""
   publicKey: ""
+
+contextRoot:
