@@ -74,26 +74,11 @@ module "sqs" {
 }
 
 
-# elasticache redis
-resource "aws_security_group" "redis" {
-  name   = "${local.project}-elasticache-redis-sg"
-  vpc_id = module.vpc.vpc_id
-}
-
-#resource "aws_security_group_rule" "redis_ingress" {
-#  type                     = "ingress"
-#  from_port                = "6379"
-#  to_port                  = "6379"
-#  protocol                 = "tcp"
-#  source_security_group_id = module.vpc.default_security_group_id
-#  security_group_id        = aws_security_group.redis.id
-#}
-
 module "redis" {
   source  = "umotif-public/elasticache-redis/aws"
   version = "~> 3.5.0"
 
-  name_prefix        = "${local.project}-redis"
+  name_prefix        = "${local.project}"
   num_cache_clusters = 2
   node_type          = "cache.t4g.small"
 
@@ -106,8 +91,7 @@ module "redis" {
   automatic_failover_enabled = true
 
   at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
-  auth_token                 = "1234567890asdfghjkl"
+  transit_encryption_enabled = false
 
   apply_immediately = true
   family            = "redis7"
@@ -134,11 +118,10 @@ module "redis" {
     }
   ]
 
-  #  allowed_security_groups = [aws_security_group.redis.id]
+  allowed_security_groups = [module.vpc.default_security_group_id]
 
   tags = merge(var.tags, {
     name = "ElastiCache Redis cluster"
   })
 }
 
-# TODO bucket s3 per primo import
