@@ -1,28 +1,11 @@
-data "aws_s3_object" "import_eservices" {
-  bucket = var.initial_load_s3_bucket
-  key    = "signalhub_eservices.csv"
-}
-
-resource "null_resource" "import_eservices_url" {
-  provisioner "local-exec" {
-    command = "aws s3 presign s3://${data.aws_s3_object.import_eservices.bucket}/${data.aws_s3_object.import_eservices.key} > import_eservices_url"
-  }
-}
-
-data "local_file" "import_eservices_url" {
-  depends_on = [
-    null_resource.import_eservices_url
-  ]
-
-  filename = "${path.root}/import_eservices_url"
-}
-
-
 locals {
   user_data = <<-EOT
     #!/bin/bash
-    sudo amazon-linux-extras install -y postgresql10
-    wget "${data.local_file.import_eservices_url.content}"
+    amazon-linux-extras install -y postgresql10
+    aws s3 presign --region ${var.aws_region} s3://${var.initial_load_s3_bucket}/signalhub_eservices.csv  | wget -i - -O signalhub_eservices.csv
+    aws s3 presign --region ${var.aws_region} s3://${var.initial_load_s3_bucket}/signalhub_agreements.csv  | wget -i - -O signalhub_agreements.csv
+    chmod a+rw signalhub_eservices.csv
+    chmod a+rw signalhub_agreements.csv
   EOT
 }
 

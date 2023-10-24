@@ -41,27 +41,4 @@ spec:
             {{- end }}
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
-            volumeMounts:
-              - name: interop-api-client-secret
-                mountPath: /certs
           restartPolicy: OnFailure
-          volumes:
-            - name: interop-api-client-secret
-              secret:
-                secretName: interop-api-client-secret
-                items:
-                  - key: privatekey
-                    path: key.rsa.priv
-                  - key: publickey
-                    path: key.rsa.pub
----
-apiVersion: v1
-kind: Secret
-type: Opaque
-metadata:
-  name: interop-api-client-secret
-data:
-  privatekey: >-
-    {{ .Values.interopApi.privateKey | b64enc }}
-  publickey: >-
-    {{ .Values.interopApi.publicKey | b64enc }}

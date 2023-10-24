@@ -43,4 +43,3 @@ output "interop_client_key_arn" {
 output "interop_client_key_id" {
   value = aws_kms_key.interop_client_key.key_id
 }
-

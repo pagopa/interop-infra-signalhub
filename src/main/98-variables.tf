@@ -124,21 +124,6 @@ variable "pdnd_auth_token_uri" {
   description = "Interop Voucher token endpoint"
 }
 
-variable "pdnd_auth_kid" {
-  type        = string
-  description = "kid of Interop API"
-}
-
-variable "interop_api_privatekey" {
-  type        = string
-  description = "Private key of Interop API Client"
-}
-
-variable "interop_api_publickey" {
-  type        = string
-  description = "Public key of Interop API Client"
-}
-
 variable "helm_aws_load_balancer_version" {
   type        = string
   description = "Helm Chart AWS Load balancer controller version"

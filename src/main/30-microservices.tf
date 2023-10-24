@@ -235,33 +235,8 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name  = "env.SECURITY_PAGOPAPROVIDER_PATHPRIVATEKEY"
-    value = "/certs/key.rsa.priv"
-  }
-
-  set {
-    name  = "env.SECURITY_PAGOPAPROVIDER_PATHPUBLICKEY"
-    value = "/certs/key.rsa.pub"
-  }
-
-  set {
-    name  = "env.SECURITY_PAGOPAPROVIDER_KMSKEYARN"
-    value = aws_kms_key.interop_client_key.arn
-  }
-
-  set {
-    name  = "env.SECURITY_PAGOPAPROVIDER_KID"
-    value = var.pdnd_auth_kid
-  }
-
-  set {
-    name  = "interopApi.privateKey"
-    value = var.interop_api_privatekey
-  }
-
-  set {
-    name  = "interopApi.publicKey"
-    value = var.interop_api_publickey
+    name  = "env.SECURITY_PAGOPAPROVIDER_KMSKEYID"
+    value = aws_kms_key.interop_client_key.key_id
   }
 
   // TODO da rimuovere
@@ -283,26 +258,3 @@ resource "helm_release" "signalhub" {
   }
 }
 
-
-resource "kubernetes_job" "demo" {
-  metadata {
-    name      = "demo"
-    namespace = var.namespace
-  }
-  spec {
-    template {
-      metadata {}
-      spec {
-        container {
-          name    = "pi"
-          image   = "alpine"
-          command = ["sh", "-c", "sleep 10"]
-        }
-        restart_policy = "Never"
-      }
-    }
-    backoff_limit = 4
-  }
-
-  depends_on = [helm_release.signalhub]
-}
