@@ -78,7 +78,7 @@ module "redis" {
   source  = "umotif-public/elasticache-redis/aws"
   version = "~> 3.5.0"
 
-  name_prefix        = "${local.project}"
+  name_prefix        = local.project
   num_cache_clusters = 2
   node_type          = "cache.t4g.small"
 

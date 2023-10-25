@@ -235,6 +235,11 @@ resource "helm_release" "signalhub" {
   }
 
   set {
+    name  = "env.JWT_PROVIDER_ENDPOINT"
+    value = var.pdnd_auth_jwk_uri
+  }
+
+  set {
     name  = "env.SECURITY_PAGOPAPROVIDER_KMSKEYID"
     value = aws_kms_key.interop_client_key.key_id
   }
@@ -249,12 +254,6 @@ resource "helm_release" "signalhub" {
   set {
     name  = "env.DATABASE_HOST"
     value = module.aurora_postgresql_v2.cluster_endpoint
-  }
-
-  // TODO da rimuovere
-  set {
-    name  = "env.dummy"
-    value = "dummy6"
   }
 }
 

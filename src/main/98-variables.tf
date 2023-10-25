@@ -124,6 +124,13 @@ variable "pdnd_auth_token_uri" {
   description = "Interop Voucher token endpoint"
 }
 
+variable "pdnd_auth_jwk_uri" {
+  type        = string
+  description = "Interop Voucher jwk endpoint"
+}
+
+
+
 variable "helm_aws_load_balancer_version" {
   type        = string
   description = "Helm Chart AWS Load balancer controller version"

@@ -16,6 +16,7 @@ spec:
   schedule: {{ .Values.cronjobs.registryUpdaterSchedule }}
   jobTemplate:
     spec:
+      backoffLimit: 0
       template:
         spec:
           {{- if .Values.imagePullSecret }}
@@ -41,4 +42,4 @@ spec:
             {{- end }}
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
