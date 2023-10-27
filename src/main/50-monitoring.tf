@@ -58,7 +58,5 @@ resource "helm_release" "prometheus" {
   version    = var.helm_prometheus_version
   namespace  = kubernetes_namespace.monitoring.id
   values     = ["${file("assets/prometheus_values.yaml")}"]
-
-  depends_on = [helm_release.metrics_server]
 }
 
