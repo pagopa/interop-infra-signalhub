@@ -66,6 +66,11 @@ module "eks" {
       username = module.eks_admins_iam_role.iam_role_name
       groups   = ["system:masters"]
     },
+    {
+      rolearn  = data.aws_iam_role.github_action.arn
+      username = data.aws_iam_role.github_action.name
+      groups   = ["system:masters"]
+    },
   ]
 
   node_security_group_additional_rules = {
