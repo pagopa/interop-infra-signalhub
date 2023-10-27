@@ -155,3 +155,24 @@ variable "initial_load_s3_bucket" {
   type        = string
   description = "Bucket for initial eservices and agreements loading"
 }
+
+variable "eservice_pull_id" {
+  type        = string
+  description = "EserviceId of PullSignal service"
+}
+
+variable "eservice_push_id" {
+  type        = string
+  description = "EserviceId of PushSignal service"
+}
+
+variable "eservice_pull_audience" {
+  type        = string
+  description = "Audience of PullSignal service"
+}
+
+variable "eservice_push_audience" {
+  type        = string
+  description = "Audience of PushSignal service"
+}
+

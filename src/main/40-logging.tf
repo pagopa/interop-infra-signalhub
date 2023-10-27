@@ -21,16 +21,25 @@ resource "kubernetes_config_map" "log" {
         Name cloudwatch_logs
         Match kube.*
         region ${var.aws_region}
-        log_group_name /aws/eks/${local.project}/cluster
-        log_stream_prefix ${local.project}-
+        log_group_name /aws/${local.project}/cluster
+        log_retention_days 7
+        auto_create_group true
+      [OUTPUT]
+        Name cloudwatch_logs
+        Match *
+        region ${var.aws_region}
+        log_group_name /aws/${local.project}/ms
+        log_retention_days 7
         auto_create_group true
     EOT
     "filters.conf" = <<-EOF
       [FILTER]
-        Name parser
-        Match *
+        Name     parser
+        Match    *
         Key_Name log
-        Parser regex
+        Parser   slf4j
+        Preserve_Key true
+        Reserve_Data true
       [FILTER]
         Name kubernetes
         Match kube.*
@@ -41,11 +50,11 @@ resource "kubernetes_config_map" "log" {
     EOF
     "parsers.conf" = <<-EOF
       [PARSER]
-        Name regex
-        Format regex
-        Regex ^(?<time>[^ ]+) (?<log>.*)$
-        Time_Key time
-        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+        Name        slf4j
+        Format      regex
+        Regex       ^(?<TIME>\d+-\d+-\d+ \d+:\d+:\d+\.\d+)\s+(?<LEVEL>\S+) \d+ --- \[\s*(?<THREAD>[^\]]+)\] (?<CONTEXT>\S+)\s+: (?<MESSAGE>.*)$
+        Time_Key    TIME
+        Time_Format %Y/%m/%d %H:%M:%S.%L
     EOF
   }
 }
@@ -72,9 +81,13 @@ resource "aws_iam_policy" "log" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "log" {
-  for_each = module.eks.fargate_profiles
+locals {
+  fargate_log_role_names = toset([for each in module.eks.fargate_profiles : each.iam_role_name if strcontains(each.iam_role_name, local.project)])
+}
 
-  role       = module.eks.cluster_iam_role_name
+resource "aws_iam_role_policy_attachment" "log" {
+  for_each = local.fargate_log_role_names
+
+  role       = each.value
   policy_arn = aws_iam_policy.log.arn
 }

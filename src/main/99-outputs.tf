@@ -43,3 +43,15 @@ output "interop_client_key_arn" {
 output "interop_client_key_id" {
   value = aws_kms_key.interop_client_key.key_id
 }
+
+output "fargate_profiles" {
+  value = module.eks.fargate_profiles
+}
+
+output "fargate_profiles_role_names" {
+  value = local.fargate_log_role_names
+}
+
+output "eks_cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+}

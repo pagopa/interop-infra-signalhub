@@ -244,6 +244,26 @@ resource "helm_release" "signalhub" {
     value = aws_kms_key.interop_client_key.key_id
   }
 
+  set {
+    name  = "env.APPLICATION_ESERVICE_PULL_ID"
+    value = var.eservice_pull_id
+  }
+
+  set {
+    name  = "env.APPLICATION_ESERVICE_PULL_AUDIENCE"
+    value = var.eservice_pull_audience
+  }
+
+  set {
+    name  = "env.APPLICATION_ESERVICE_PUSH_ID"
+    value = var.eservice_push_id
+  }
+
+  set {
+    name  = "env.APPLICATION_ESERVICE_PUSH_AUDIENCE"
+    value = var.eservice_push_audience
+  }
+
   // TODO da rimuovere
   set {
     name  = "env.SERVER_PORT"
