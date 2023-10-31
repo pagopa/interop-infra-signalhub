@@ -157,14 +157,15 @@ module "allow_assume_eks_admins_iam_policy" {
 #  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
 #}
 
-#module "eks_admins_iam_group_signal_hub_developers"  {
-#  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
-#  version = "5.30.0"
-#
-#  name                              = "SignalHubDevelopers"
-#  attach_iam_self_management_policy = false
-#  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
-#}
+module "eks_admins_iam_group_signal_hub_developers" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
+  version = "5.30.0"
+
+  name                              = "SignalHubDevelopers"
+  create_group                      = false
+  attach_iam_self_management_policy = false
+  custom_group_policy_arns          = [module.allow_assume_eks_admins_iam_policy.arn]
+}
 
 data "aws_eks_cluster_auth" "eks" {
   name = "${local.project}-eks"

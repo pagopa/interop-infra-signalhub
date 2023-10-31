@@ -60,3 +60,28 @@ resource "helm_release" "prometheus" {
   values     = ["${file("assets/prometheus_values.yaml")}"]
 }
 
+resource "random_password" "grafana" {
+  length  = 20
+  special = false
+}
+
+resource "kubernetes_secret" "grafana_admin_secret" {
+  metadata {
+    name      = "grafana-admin-secret"
+    namespace = kubernetes_namespace.monitoring.id
+  }
+
+  data = {
+    "admin-user"     = "admin",
+    "admin-password" = random_password.grafana.result
+  }
+}
+
+resource "helm_release" "grafana" {
+  name       = "grafana"
+  repository = "https://grafana.github.io/helm-charts"
+  chart      = "grafana"
+  namespace  = kubernetes_namespace.monitoring.id
+  values     = ["${file("assets/grafana_values.yaml")}"]
+}
+
