@@ -14,6 +14,7 @@ metadata:
 spec:
   concurrencyPolicy: Forbid
   schedule: {{ .Values.cronjobs.registryUpdaterSchedule }}
+  suspend: true
   jobTemplate:
     spec:
       backoffLimit: 0

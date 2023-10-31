@@ -2,10 +2,11 @@ locals {
   user_data = <<-EOT
     #!/bin/bash
     amazon-linux-extras install -y postgresql10
+    aws configure set default.s3.addressing_style virtual
     aws s3 presign --region ${var.aws_region} s3://${var.initial_load_s3_bucket}/signalhub_eservices.csv  | wget -i - -O signalhub_eservices.csv
     aws s3 presign --region ${var.aws_region} s3://${var.initial_load_s3_bucket}/signalhub_agreements.csv  | wget -i - -O signalhub_agreements.csv
-    chmod a+rw signalhub_eservices.csv
-    chmod a+rw signalhub_agreements.csv
+    chown ec2-user:ec2-user signalhub*.csv
+    mv signalhub*.csv /home/ec2-user/
   EOT
 }
 
