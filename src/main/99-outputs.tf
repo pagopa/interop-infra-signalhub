@@ -55,3 +55,7 @@ output "fargate_profiles_role_names" {
 output "eks_cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
+
+output "cloudwatch_log_group_name" {
+  value = module.eks.cloudwatch_log_group_name
+}

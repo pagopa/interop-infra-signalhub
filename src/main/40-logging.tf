@@ -21,21 +21,16 @@ resource "kubernetes_config_map" "log" {
         Name cloudwatch_logs
         Match kube.*
         region ${var.aws_region}
-        log_group_name /aws/${local.project}/cluster
+        log_group_name /aws/pod/${local.project}/
         log_retention_days 7
-        auto_create_group true
-      [OUTPUT]
-        Name cloudwatch_logs
-        Match *
-        region ${var.aws_region}
-        log_group_name /aws/${local.project}/ms
-        log_retention_days 7
+        log_stream_prefix fallback-stream
+        log_stream_template $kubernetes['pod_name']
         auto_create_group true
     EOT
     "filters.conf" = <<-EOF
       [FILTER]
         Name     parser
-        Match    *
+        Match    kube.*
         Key_Name log
         Parser   slf4j
         Preserve_Key true
@@ -52,9 +47,7 @@ resource "kubernetes_config_map" "log" {
       [PARSER]
         Name        slf4j
         Format      regex
-        Regex       ^(?<TIME>\d+-\d+-\d+ \d+:\d+:\d+\.\d+)\s+(?<LEVEL>\S+) \d+ --- \[\s*(?<THREAD>[^\]]+)\] (?<CONTEXT>\S+)\s+: (?<MESSAGE>.*)$
-        Time_Key    TIME
-        Time_Format %Y/%m/%d %H:%M:%S.%L
+        Regex       ^(.*\s)(?<TIME>\d+-\d+-\d+T\d+:\d+:\d+\.\d+Z)\s+(?<LEVEL>\S+) \d+ --- \[\s*(?<THREAD>[^\]]+)\] (?<CONTEXT>\S+)\s+: (?<MESSAGE>.*)$
     EOF
   }
 }
@@ -72,7 +65,8 @@ resource "aws_iam_policy" "log" {
           "logs:CreateLogStream",
           "logs:CreateLogGroup",
           "logs:DescribeLogStreams",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "logs:PutRetentionPolicy"
         ]
         Effect   = "Allow"
         Resource = "*"
