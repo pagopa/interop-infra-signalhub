@@ -33,7 +33,7 @@ resource "kubernetes_config_map" "log" {
         Match    kube.*
         Key_Name log
         Parser   slf4j
-        Preserve_Key true
+        Preserve_Key false
         Reserve_Data true
       [FILTER]
         Name kubernetes
@@ -47,7 +47,9 @@ resource "kubernetes_config_map" "log" {
       [PARSER]
         Name        slf4j
         Format      regex
-        Regex       ^(.*\s)(?<TIME>\d+-\d+-\d+T\d+:\d+:\d+\.\d+Z)\s+(?<LEVEL>\S+) \d+ --- \[\s*(?<THREAD>[^\]]+)\] (?<CONTEXT>\S+)\s+: (?<MESSAGE>.*)$
+        Regex       ^(?<t>[^ ]+) (?<stream>stdout|stderr) (?<logtag>P|F) (?<time>\d+-\d+-\d+\s\d+:\d+:\d+\.\d+)\s+(?<level>\S+) \d+ --- \[\s*(?<thread>[^\]]+)\] (?<context>\S+)\s+: (?<message>.*)$
+        Time_Key    t
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
     EOF
   }
 }
