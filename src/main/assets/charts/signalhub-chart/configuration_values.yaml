@@ -95,6 +95,7 @@ apiServiceFqdn: ""
 
 cronjobs:
   registryUpdaterSchedule: "0 */1 * * *"
+  historyCleanupSchedule: "0 3 * * *"
 
 interopApi:
   privateKey: ""

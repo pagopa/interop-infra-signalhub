@@ -2,19 +2,19 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: interop-be-signalhub-registry-updater-cronjob
+  name: interop-be-signalhub-history-cleanup-cronjob
   labels:
     helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name: interop-be-signalhub-registry-updater-cronjob
+    app.kubernetes.io/name: interop-be-signalhub-history-cleanup-cronjob
     app.kubernetes.io/instance: {{ .Release.Name }}
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.cronjobs.historyCleanupSchedule }}
-  suspend: true
+  schedule: {{ .Values.cronjobs.registryUpdaterSchedule }}
+  suspend: false
   jobTemplate:
     spec:
       backoffLimit: 0
@@ -29,10 +29,10 @@ spec:
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           containers:
-          - name: interop-be-registry-updater-ms
+          - name: interop-be-signalhub-history-cleanup-ms
             securityContext:
               {{- toYaml .Values.securityContext | nindent 12 }}
-            image: "{{ .Values.image.repository }}/interop-be-signalhub-registry-updater:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            image: "{{ .Values.image.repository }}/interop-be-signalhub-history-cleanup:{{ .Values.image.tag | default .Chart.AppVersion }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             {{- with .Values.env }}
             env:
