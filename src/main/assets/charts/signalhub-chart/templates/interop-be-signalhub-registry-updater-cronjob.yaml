@@ -13,7 +13,7 @@ metadata:
     reloader.stakater.com/auto: "true"
 spec:
   concurrencyPolicy: Forbid
-  schedule: {{ .Values.cronjobs.historyCleanupSchedule }}
+  schedule: {{ .Values.cronjobs.registryUpdaterSchedule }}
   suspend: true
   jobTemplate:
     spec:
