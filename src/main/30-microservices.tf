@@ -180,12 +180,12 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name  = "env.SPRING_REDIS_HOST"
+    name  = "env.SPRING_DATA_REDIS_HOST"
     value = module.redis.elasticache_replication_group_primary_endpoint_address
   }
 
   set {
-    name  = "env.SPRING_REDIS_PORT"
+    name  = "env.SPRING_DATA_REDIS_PORT"
     value = module.redis.elasticache_port
   }
 
