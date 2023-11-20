@@ -47,8 +47,8 @@ resource "kubernetes_config_map" "log" {
       [PARSER]
         Name        slf4j
         Format      regex
-        Regex       ^(?<t>[^ ]+) (?<stream>stdout|stderr) (?<logtag>P|F) (?<time>\d+-\d+-\d+\s\d+:\d+:\d+\.\d+)\s+(?<level>\S+) \d+ --- \[\s*(?<thread>[^\]]+)\] (?<context>\S+)\s+: (?<message>.*)$
-        Time_Key    t
+        Regex       (?<t>[^ ]+) (?<stream>stdout|stderr) (?<logtag>P|F) (?<time>[^ ]+)\s+(?<level>\S+) \d+ --- \[\s*(?<thread>[^\]]+)\] (?<context>\S+)\s+: (?<message>.*)$
+        Time_Key    time
         Time_Format %Y-%m-%dT%H:%M:%S.%L%z
     EOF
   }
