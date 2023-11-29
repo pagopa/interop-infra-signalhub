@@ -176,3 +176,9 @@ variable "eservice_push_audience" {
   description = "Audience of PushSignal service"
 }
 
+variable "history_cleanup_delay_days" {
+  type        = string
+  description = "Number of days from today after which the signals are deleted"
+  default     = "30"
+}
+

@@ -264,6 +264,11 @@ resource "helm_release" "signalhub" {
     value = var.eservice_push_audience
   }
 
+  set {
+    name  = "env.PDND_HISTORYCLEANUP_DELAYDAYS"
+    value = var.history_cleanup_delay_days
+  }
+
   // TODO da rimuovere
   set {
     name  = "env.SERVER_PORT"
