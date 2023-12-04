@@ -235,6 +235,11 @@ resource "helm_release" "signalhub" {
   }
 
   set {
+    name  = "env.SECURITY_PAGOPAPROVIDER_AUDIENCE"
+    value = var.pdnd_auth_audience
+  }
+
+  set {
     name  = "env.JWT_PROVIDER_ENDPOINT"
     value = var.pdnd_auth_jwk_uri
   }

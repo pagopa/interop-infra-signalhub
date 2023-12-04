@@ -129,6 +129,11 @@ variable "pdnd_auth_jwk_uri" {
   description = "Interop Voucher jwk endpoint"
 }
 
+variable "pdnd_auth_audience" {
+  type        = string
+  description = "Audience of Interop API"
+}
+
 
 
 variable "helm_aws_load_balancer_version" {
@@ -181,4 +186,21 @@ variable "history_cleanup_delay_days" {
   description = "Number of days from today after which the signals are deleted"
   default     = "30"
 }
+
+variable "time_response_thresholds" {
+  default = {
+    period    = "60" //Seconds
+    statistic = "Average"
+    threshold = "30" //Seconds
+  }
+}
+
+variable "fiveXXs_thresholds" {
+  default = {
+    period    = "60" //Seconds
+    statistic = "Average"
+    threshold = "1" //Count
+  }
+}
+
 
