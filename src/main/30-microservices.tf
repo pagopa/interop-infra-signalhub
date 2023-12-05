@@ -273,17 +273,5 @@ resource "helm_release" "signalhub" {
     name  = "env.PDND_HISTORYCLEANUP_DELAYDAYS"
     value = var.history_cleanup_delay_days
   }
-
-  // TODO da rimuovere
-  set {
-    name  = "env.SERVER_PORT"
-    value = 8080
-  }
-
-  // TODO da rimuovere
-  set {
-    name  = "env.DATABASE_HOST"
-    value = module.aurora_postgresql_v2.cluster_endpoint
-  }
 }
 
