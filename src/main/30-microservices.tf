@@ -270,8 +270,8 @@ resource "helm_release" "signalhub" {
   }
 
   set {
-    name  = "env.PDND_HISTORYCLEANUP_DELAYDAYS"
-    value = var.history_cleanup_delay_days
+    name  = "env.PDND_HISTORYCLEANUP_DELAYHOURS"
+    value = var.history_cleanup_delay_hours
   }
 }
 

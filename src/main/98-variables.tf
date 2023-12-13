@@ -181,10 +181,10 @@ variable "eservice_push_audience" {
   description = "Audience of PushSignal service"
 }
 
-variable "history_cleanup_delay_days" {
+variable "history_cleanup_delay_hours" {
   type        = string
-  description = "Number of days from today after which the signals are deleted"
-  default     = "30"
+  description = "Number of hours after which the signals are deleted"
+  default     = "720"
 }
 
 variable "time_response_thresholds" {
