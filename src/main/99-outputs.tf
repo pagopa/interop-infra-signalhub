@@ -64,3 +64,24 @@ output "signalhub_cluster_name" {
 output "interop_client_key_arn" {
   value = aws_kms_key.interop_client_key.arn
 }
+
+output "db_hostname" {
+  description = "Aurora Postgresql hostname"
+  value       = module.aurora_postgresql_v2.cluster_endpoint
+}
+
+output "db_port" {
+  description = "Aurora Postgresql port"
+  value       = module.aurora_postgresql_v2.cluster_port
+}
+
+output "db_name" {
+  description = "Aurora Postgresql schema name"
+  value       = module.aurora_postgresql_v2.cluster_database_name
+}
+
+output "signalhub_bastion" {
+  description = "Signalhub bastion"
+  value       = module.bastion.id
+}
+
