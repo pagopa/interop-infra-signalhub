@@ -6,7 +6,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> <terraform aws plugin version eg: 4.0.0>"
+      version = "5.21.0"
+    }
+
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.11.0"
     }
   }
 }
@@ -19,7 +24,7 @@ provider "aws" {
 }
 
 locals {
-  project = format("%s-%s", var.app_name, var.env_short)
+  project = format("%s-%s", var.app_name, var.environment)
 }
 
 data "aws_caller_identity" "current" {}

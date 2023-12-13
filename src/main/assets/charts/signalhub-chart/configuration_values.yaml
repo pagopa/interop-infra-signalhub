@@ -1,0 +1,104 @@
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: Always
+  tag: ""
+  port: 8080
+  securityGroupIds: []
+
+env: {}
+
+imagePullSecret: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  targetGroupArn: ""
+  type: ClusterIP
+  port: 80
+
+pushLivenessProbe:
+  httpGet:
+    path: /push/actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+pushReadinessProbe:
+  httpGet:
+    path: /push/actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+pullLivenessProbe:
+  httpGet:
+    path: /pull/actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+pullReadinessProbe:
+  httpGet:
+    path: /pull/actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 120
+  failureThreshold: 12
+  periodSeconds: 15
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "40m"
+  limits:
+    memory: "512Mi"
+    cpu: "150m"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+autoscaling:
+  enable: false
+  minReplica: 1
+  maxReplica: 1
+  pollingInterval: 10 # seconds
+  cooldownPeriod: 300 # seconds
+  triggers: []
+
+apiServiceFqdn: ""
+
+cronjobs:
+  registryUpdaterSchedule: "0 */1 * * *"
+  historyCleanupSchedule: "0 3 * * *"
+
+interopApi:
+  privateKey: ""
+  publicKey: ""
+
+contextRoot:

@@ -1,6 +1,7 @@
 name: "Terraform-Plan"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - '**'        # matches every branch
@@ -23,7 +24,8 @@ jobs:
   terraform:
     strategy:
       matrix:
-        environment: [dev, uat, prod]
+        # environment: [dev, uat, prod]
+        environment: [dev]
     name: "terraform-plan"
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}

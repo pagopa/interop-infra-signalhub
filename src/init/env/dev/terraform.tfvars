@@ -4,6 +4,6 @@ tags = {
   "Environment" = "Dev"
   "Owner"       = "PagoPa"
   "Scope"       = "tfstate"
-  "Source"      = "<git repository url>"
+  "Source"      = "https://github.com/pagopa/interop-infra-signalhub"
   "name"        = "S3 Remote Terraform State Store"
 }
